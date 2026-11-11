@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Laporan Iklan Harian — Snuru · Vablo · Sleepe</title>
+<style>
+  :root {
+    --color-fg: #1c1b19; --color-fg-muted: #6b6860; --color-bg: #f5f3ee; --color-panel: #ffffff; --color-border-line: #e2ded5;
+    --color-ok: #1f7a43; --color-warn: #a86400; --color-bad: #c0392b;
+    --b1c: #2f6fd0; --b2c: #d4622b; --b3c: #1f9d78;
+    --font-anthropic-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; --font-anthropic-serif: Georgia, "Times New Roman", serif;
+    --cds-font-size-caption: 12.5px; --cds-font-size-body: 14.5px; --cds-font-size-heading: 17px; --cds-font-size-title: 28px; --cds-font-weight-medium: 600;
+    --cds-gap-xs: 4px; --cds-gap-sm: 8px; --cds-gap-md: 14px; --cds-gap-lg: 22px; --cds-pad-xs: 5px; --cds-pad-sm: 10px; --cds-pad-lg: 18px; --cds-radius: 10px;
+    --cds-chart-grid: #ece9e1; --cds-chart-axis: #c9c4b8; --cds-chart-reference: #9a958a;
+    --cds-surface-popover: #ffffff; --cds-border: #d6d1c6; --cds-shadow-popover: 0 6px 20px rgba(0,0,0,.14); --cds-text-secondary: #6b6860; --cds-dur-slow: .3s;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-fg: #eceae4; --color-fg-muted: #a09c92; --color-bg: #171614; --color-panel: #21201d; --color-border-line: #36342f;
+      --color-ok: #58c486; --color-warn: #e0a94a; --color-bad: #ef7d6f;
+      --b1c: #6a9df0; --b2c: #ec8a57; --b3c: #4cc7a0;
+      --cds-chart-grid: #2c2a26; --cds-chart-axis: #4a4740; --cds-chart-reference: #7d796f;
+      --cds-surface-popover: #2a2925; --cds-border: #45423b; --cds-shadow-popover: 0 6px 20px rgba(0,0,0,.5); --cds-text-secondary: #a09c92;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-family: var(--font-anthropic-sans); font-size: var(--cds-font-size-body); line-height: 1.45; }
+  #dash-root { max-width: 1320px; margin: 0 auto; padding: 28px 16px 48px; }
+  .site-foot { max-width: 1320px; margin: 0 auto; padding: 0 16px 32px; color: var(--color-fg-muted); font-size: 12.5px; }
+  #load-error { margin: 0 0 16px; padding: 10px 14px; border: 1px solid var(--color-bad); border-radius: 10px; color: var(--color-bad); background: var(--color-panel); }
+</style>
+<script src="assets/d3.min.js"></script>
+<script src="assets/shim.js"></script>
+</head>
+<body>
+<div id="dash-root">
+<p id="load-error" hidden>Data gagal dimuat. Coba muat ulang halaman.</p>
+<style>
+  .ah { display: flex; flex-direction: column; gap: var(--cds-gap-lg); font-family: var(--font-anthropic-sans); }
+  .ah-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--cds-gap-md); }
+  .ah-title { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; }
+  .ah-sub { color: var(--color-fg-muted); margin: var(--cds-gap-xs) 0 0; font-size: var(--cds-font-size-body); }
+  .ah-sub b { color: var(--color-fg); font-weight: 500; }
+  .ah-ctl { display: flex; align-items: center; gap: var(--cds-gap-sm); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .ah-filter { display: flex; flex-direction: column; gap: var(--cds-gap-sm); align-items: flex-end; position: relative; }
+  .ah-range { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); }
+  .ah-presets { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs); }
+  .ah-pre { font: inherit; font-size: var(--cds-font-size-caption); color: var(--color-fg); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+  .ah-pre:hover, .ah-pre:focus-visible { border-color: var(--color-fg-muted); }
+  .ah-pre[aria-pressed="true"] { background: var(--color-fg); color: var(--color-bg); border-color: var(--color-fg); }
+  @media (max-width: 640px) { .ah-filter { align-items: stretch; } }
+  .ah-pick { cursor: pointer; min-width: 15rem; text-align: left; display: inline-flex; align-items: center; gap: 8px; }
+  .ah-pick:hover, .ah-pick:focus-visible { border-color: var(--color-fg-muted); }
+  .ah-pick-ico { color: var(--color-fg-muted); }
+  .ah-cal { position: absolute; right: 0; top: 2.75rem; z-index: 5; width: min(18rem, calc(100vw - 32px)); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-sm); box-shadow: var(--cds-shadow-popover); }
+  .ah-cal[hidden] { display: none; }
+  .ah-cal-hint { font-size: 11px; color: var(--color-fg-muted); margin: 0 0 6px; text-align: center; }
+  .ah-cal-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; font-size: var(--cds-font-size-caption); color: var(--color-fg); font-weight: 500; }
+  .ah-cal-nav { font: inherit; color: var(--color-fg); background: transparent; border: 1px solid var(--color-border-line); border-radius: 999px; width: 28px; height: 28px; cursor: pointer; }
+  .ah-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; }
+  .ah-cal-dow { font-size: 11px; color: var(--color-fg-muted); padding: 2px 0; }
+  .ah-cal-day { font: inherit; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; color: var(--color-fg); background: transparent; border: 0; border-radius: 6px; padding: 6px 0; cursor: pointer; }
+  .ah-cal-day:hover:not(:disabled) { outline: 1px solid var(--color-fg-muted); }
+  .ah-cal-day:disabled { color: var(--color-fg-muted); opacity: .4; cursor: default; }
+  .ah-cal-day.in { background: var(--color-border-line); }
+  .ah-cal-day.edge { background: var(--color-fg); color: var(--color-bg); }
+  .ah-date, .ah-ctl select { font: inherit; font-size: var(--cds-font-size-body); color: var(--color-fg); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-xs) var(--cds-pad-sm); }
+  .ah-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: var(--cds-gap-md); }
+  .ah-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
+  .ah-card h3 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); display: flex; align-items: center; gap: var(--cds-gap-sm); }
+  .ah-dot { width: .625rem; height: .625rem; border-radius: 50%; display: inline-block; }
+  .ah-big { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; }
+  .ah-kv { display: grid; grid-template-columns: auto 1fr; gap: var(--cds-gap-xs) var(--cds-gap-md); font-size: var(--cds-font-size-caption); }
+  .ah-kv dt { color: var(--color-fg-muted); }
+  .ah-kv dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; color: var(--color-fg); }
+  .ah-note { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: 0; }
+  .ah-panel { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
+  .ah-panel h2 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+  .ah-chart { position: relative; min-height: 240px; }
+  .ah-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); white-space: nowrap; z-index: 2; }
+  .ah-tip .d { color: var(--cds-text-secondary); }
+  .ah-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .ah-legend span { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
+  .ah-scroll { overflow: auto; max-height: 70vh; }
+  .ah-scroll-sm { max-height: none; }
+  .ah-table td.warn { color: var(--color-warn); font-weight: 600; }
+  .ah-table { border-collapse: separate; border-spacing: 0; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; width: max-content; min-width: 100%; }
+  .ah-table th, .ah-table td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+  .ah-table thead th { position: sticky; background: var(--color-panel); color: var(--color-fg-muted); font-weight: 500; z-index: 1; }
+  .ah-table thead tr:first-child th { top: 0; color: var(--color-fg); font-size: var(--cds-font-size-body); }
+  .ah-table thead tr:nth-child(2) th { top: 33px; }
+  .ah-table .l { text-align: left; }
+  .ah-table .grp { border-left: 2px solid var(--color-border-line); }
+  .ah-table .b1 { border-bottom: 2px solid var(--b1); } .ah-table .b2 { border-bottom: 2px solid var(--b2); } .ah-table .b3 { border-bottom: 2px solid var(--b3); }
+  .ah-table tbody tr.wk td { border-top: 1px solid var(--cds-chart-axis); }
+  .ah-table tr.tot td { font-weight: 600; background: var(--color-bg); }
+  .ah-table td.bad { color: var(--color-bad); }
+  .ah-table td.ok { color: var(--color-ok); }
+  .ah-delta { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .ah-delta.up { color: var(--color-ok); } .ah-delta.down { color: var(--color-bad); }
+  .ah-ins { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--cds-gap-xs); font-size: var(--cds-font-size-body); }
+  .ah-ins li { padding: 6px 10px; border-left: 3px solid var(--color-border-line); background: var(--color-bg); border-radius: 0 var(--cds-radius) var(--cds-radius) 0; }
+  .ah-ins li.ok { border-left-color: var(--color-ok); } .ah-ins li.bad { border-left-color: var(--color-bad); } .ah-ins li.mid { border-left-color: var(--color-warn); }
+  .ah-tog { font: inherit; font-size: var(--cds-font-size-caption); color: var(--color-fg); background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+  .ah-tog:hover, .ah-tog:focus-visible { border-color: var(--color-fg-muted); }
+  .ah-tog[aria-pressed="true"] { background: var(--color-fg); color: var(--color-bg); border-color: var(--color-fg); }
+  .ah-leg { font: inherit; font-size: var(--cds-font-size-caption); color: var(--color-fg); background: transparent; border: 0; padding: 2px 0; cursor: pointer; display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
+  .ah-leg[aria-pressed="false"] { opacity: .4; text-decoration: line-through; }
+  .ah-share-row { display: grid; grid-template-columns: 5rem 1fr; gap: var(--cds-gap-sm); align-items: center; font-size: var(--cds-font-size-caption); }
+  .ah-share-row > span { color: var(--color-fg-muted); }
+  .ah-bar { display: flex; height: 14px; border-radius: 4px; overflow: hidden; background: var(--color-border-line); }
+  .ah-bar i { display: block; height: 100%; }
+  .ah-pct { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); margin-top: 4px; font-variant-numeric: tabular-nums; color: var(--color-fg); }
+  .ah-pct span { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
+  .ah-table td.best { color: var(--color-ok); font-weight: 600; }
+  [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+</style>
+
+<div class="ah">
+  <div class="ah-head">
+    <div>
+      <h1 class="ah-title">Ads harian Snuru · Vablo · Sleepe</h1>
+      <p class="ah-sub">TikTok GMV Max per hari. Data terakhir: <b data-draw="last" data-source="ads">—</b></p>
+      <p class="ah-sub">Periode: <b data-draw="period" data-source="ads">—</b></p>
+      <p class="ah-sub">Gabungan 3 brand di periode ini: GMV <b data-draw="card" data-brand="t" data-metric="gmv" data-source="wide">—</b> dari spend <b data-draw="card" data-brand="t" data-metric="spend" data-source="wide">—</b>, ROAS <b data-draw="card" data-brand="t" data-metric="roi" data-source="wide">—</b>. ROAS tertinggi: <b data-draw="leader" data-source="wide">—</b>.</p>
+    </div>
+    <div class="ah-filter">
+      <div class="ah-range">
+        <button type="button" id="ah-pick" class="ah-date ah-pick" aria-haspopup="dialog" aria-expanded="false" aria-label="Pilih periode"><span class="ah-pick-ico" aria-hidden="true">📅</span><span data-draw="pick-label" data-source="ads">—</span></button>
+        <div id="ah-cal" class="ah-cal" role="dialog" aria-label="Pilih periode: klik tanggal awal, lalu tanggal akhir" hidden>
+          <p class="ah-cal-hint">Klik tanggal awal, lalu klik tanggal akhir</p>
+          <div data-draw="cal" data-source="ads"></div>
+        </div>
+      </div>
+      <div class="ah-presets" role="group" aria-label="Pilihan cepat">
+        <button type="button" class="ah-pre" data-pre="last">Hari terakhir</button>
+        <button type="button" class="ah-pre" data-pre="7">7 hari</button>
+        <button type="button" class="ah-pre" data-pre="mtd">Bulan ini</button>
+        <button type="button" class="ah-pre" data-pre="prev">Bulan lalu</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="ah-cards" aria-label="Total periode per brand">
+    <div class="ah-card" id="gabungan">
+      <h3>Gabungan 3 brand</h3>
+      <div class="ah-big" data-draw="card" data-brand="t" data-metric="gmv" data-source="wide">—</div>
+      <p class="ah-note">GMV periode ini</p>
+      <p class="ah-note">vs periode sebelumnya: GMV <span data-draw="delta" data-brand="t" data-metric="gmv" data-source="wide">—</span> · ROAS <span data-draw="delta" data-brand="t" data-metric="roi" data-source="wide">—</span></p>
+      <dl class="ah-kv">
+        <dt>Spend</dt><dd data-draw="card" data-brand="t" data-metric="spend" data-source="wide">—</dd>
+        <dt>Pesanan</dt><dd data-draw="card" data-brand="t" data-metric="orders" data-source="wide">—</dd>
+        <dt>ROAS</dt><dd data-draw="card" data-brand="t" data-metric="roi" data-source="wide">—</dd>
+        <dt>Biaya per pesanan</dt><dd data-draw="card" data-brand="t" data-metric="cpo" data-source="wide">—</dd>
+      </dl>
+    </div>
+    <div class="ah-card">
+      <h3><span class="ah-dot" style="background: var(--b1)"></span>Snuru</h3>
+      <div class="ah-big" data-draw="card" data-brand="s" data-metric="gmv" data-source="wide">—</div>
+      <p class="ah-note">GMV periode ini</p>
+      <p class="ah-note">vs periode sebelumnya: GMV <span data-draw="delta" data-brand="s" data-metric="gmv" data-source="wide">—</span> · ROAS <span data-draw="delta" data-brand="s" data-metric="roi" data-source="wide">—</span></p>
+      <dl class="ah-kv">
+        <dt>Spend</dt><dd data-draw="card" data-brand="s" data-metric="spend" data-source="wide">—</dd>
+        <dt>Pesanan</dt><dd data-draw="card" data-brand="s" data-metric="orders" data-source="wide">—</dd>
+        <dt>ROAS</dt><dd data-draw="card" data-brand="s" data-metric="roi" data-source="wide">—</dd>
+        <dt>Biaya per pesanan</dt><dd data-draw="card" data-brand="s" data-metric="cpo" data-source="wide">—</dd>
+      </dl>
+    </div>
+    <div class="ah-card">
+      <h3><span class="ah-dot" style="background: var(--b2)"></span>Vablo</h3>
+      <div class="ah-big" data-draw="card" data-brand="v" data-metric="gmv" data-source="wide">—</div>
+      <p class="ah-note">GMV periode ini</p>
+      <p class="ah-note">vs periode sebelumnya: GMV <span data-draw="delta" data-brand="v" data-metric="gmv" data-source="wide">—</span> · ROAS <span data-draw="delta" data-brand="v" data-metric="roi" data-source="wide">—</span></p>
+      <dl class="ah-kv">
+        <dt>Spend</dt><dd data-draw="card" data-brand="v" data-metric="spend" data-source="wide">—</dd>
+        <dt>Pesanan</dt><dd data-draw="card" data-brand="v" data-metric="orders" data-source="wide">—</dd>
+        <dt>ROAS</dt><dd data-draw="card" data-brand="v" data-metric="roi" data-source="wide">—</dd>
+        <dt>Biaya per pesanan</dt><dd data-draw="card" data-brand="v" data-metric="cpo" data-source="wide">—</dd>
+      </dl>
+    </div>
+    <div class="ah-card">
+      <h3><span class="ah-dot" style="background: var(--b3)"></span>Sleepe</h3>
+      <div class="ah-big" data-draw="card" data-brand="l" data-metric="gmv" data-source="wide">—</div>
+      <p class="ah-note">GMV periode ini</p>
+      <p class="ah-note">vs periode sebelumnya: GMV <span data-draw="delta" data-brand="l" data-metric="gmv" data-source="wide">—</span> · ROAS <span data-draw="delta" data-brand="l" data-metric="roi" data-source="wide">—</span></p>
+      <dl class="ah-kv">
+        <dt>Spend</dt><dd data-draw="card" data-brand="l" data-metric="spend" data-source="wide">—</dd>
+        <dt>Pesanan</dt><dd data-draw="card" data-brand="l" data-metric="orders" data-source="wide">—</dd>
+        <dt>ROAS</dt><dd data-draw="card" data-brand="l" data-metric="roi" data-source="wide">—</dd>
+        <dt>Biaya per pesanan</dt><dd data-draw="card" data-brand="l" data-metric="cpo" data-source="wide">—</dd>
+      </dl>
+    </div>
+  </section>
+
+  <p class="ah-note">"Periode sebelumnya" = jumlah hari yang sama, tepat sebelum periode yang dipilih. ROAS = GMV ÷ spend.</p>
+
+  <section class="ah-panel" id="catatan">
+    <h2>Catatan otomatis</h2>
+    <p class="ah-note">Dihitung ulang tiap periode diganti. Patokan: ROAS 10 ke atas sehat, di bawah 5 lemah. Ini hasil hitungan dari angka, bukan keputusan; tetap cek konteksnya (promo, tanggal kembar, stok).</p>
+    <ul class="ah-ins" data-draw="insights" data-source="wide saldo_view"></ul>
+  </section>
+
+  <section class="ah-panel" id="saldo">
+    <h2>Saldo akun iklan</h2>
+    <p class="ah-note">Dari halaman Billing TikTok Ads tiap brand, dicek <b data-draw="saldo-at" data-source="saldo">—</b> WIB. Vablo dan Snuru dibayar lewat GMV Pay (dipotong dari GMV toko), jadi saldo tunai 0 tidak menghentikan iklan. Sleepe masih pakai saldo tunai, jadi perlu dipantau. Perkiraan "cukup untuk" = saldo tersedia ÷ rata-rata spend 7 hari terakhir.</p>
+    <div class="ah-scroll ah-scroll-sm">
+      <table class="ah-table" data-source="saldo_view" data-row-key="brand">
+        <thead>
+          <tr>
+            <th class="l" data-field="brand">Brand</th>
+            <th data-field="cash">Saldo tersedia</th>
+            <th data-field="total">Total saldo</th>
+            <th data-field="credit">Kredit iklan</th>
+            <th data-field="avg7">Rata-rata spend/hari (7 hari)</th>
+            <th data-field="days_left">Cukup untuk</th>
+            <th data-field="cycle_spend">Tagihan berjalan</th>
+            <th data-field="threshold">Batas tagih otomatis</th>
+            <th class="l" data-field="payment">Pembayaran</th>
+            <th class="l" data-field="last_tx">Transaksi terakhir</th>
+          </tr>
+        </thead>
+        <tbody data-draw="saldo" data-source="saldo_view"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="ah-panel" id="roas-chart">
+    <h2>Tren harian</h2>
+    <p class="ah-note">Pilih metrik yang mau dilihat per hari. Klik nama brand untuk menyembunyikan atau menampilkan garisnya; berguna karena angka Vablo jauh lebih besar dari dua brand lain. Di metrik ROAS, garis putus-putus = ROAS 10.</p>
+    <div class="ah-presets" role="group" aria-label="Metrik grafik">
+      <button type="button" class="ah-tog" data-met="roi" aria-pressed="true">ROAS</button>
+      <button type="button" class="ah-tog" data-met="spend" aria-pressed="false">Spend</button>
+      <button type="button" class="ah-tog" data-met="gmv" aria-pressed="false">GMV</button>
+      <button type="button" class="ah-tog" data-met="orders" aria-pressed="false">Pesanan</button>
+      <button type="button" class="ah-tog" data-met="cpo" aria-pressed="false">Biaya per pesanan</button>
+    </div>
+    <div class="ah-legend" role="group" aria-label="Brand di grafik">
+      <button type="button" class="ah-leg" data-brand="s" aria-pressed="true"><span class="ah-dot" style="background: var(--b1)"></span>Snuru</button>
+      <button type="button" class="ah-leg" data-brand="v" aria-pressed="true"><span class="ah-dot" style="background: var(--b2)"></span>Vablo</button>
+      <button type="button" class="ah-leg" data-brand="l" aria-pressed="true"><span class="ah-dot" style="background: var(--b3)"></span>Sleepe</button>
+    </div>
+    <div class="ah-chart" data-draw="roas" data-source="wide"></div>
+  </section>
+
+  <section class="ah-panel" id="porsi">
+    <h2>Porsi tiap brand</h2>
+    <p class="ah-note">Bagian tiap brand dari angka gabungan di periode ini. Kalau porsi spend sebuah brand lebih besar dari porsi GMV-nya, brand itu kurang efisien dibanding yang lain.</p>
+    <div class="ah-legend">
+      <span><span class="ah-dot" style="background: var(--b1)"></span>Snuru</span>
+      <span><span class="ah-dot" style="background: var(--b2)"></span>Vablo</span>
+      <span><span class="ah-dot" style="background: var(--b3)"></span>Sleepe</span>
+    </div>
+    <div class="ah-share-row"><span>Spend</span><div data-draw="share" data-metric="spend" data-source="wide"></div></div>
+    <div class="ah-share-row"><span>GMV</span><div data-draw="share" data-metric="gmv" data-source="wide"></div></div>
+    <div class="ah-share-row"><span>Pesanan</span><div data-draw="share" data-metric="orders" data-source="wide"></div></div>
+  </section>
+
+  <section class="ah-panel" id="rekap-bulanan">
+    <h2>Rekap bulanan</h2>
+    <p class="ah-note">Total per bulan, 12 bulan terakhir, terbaru di atas. Tidak ikut filter periode. Bulan berjalan belum lengkap, lihat kolom Hari.</p>
+    <div class="ah-scroll ah-scroll-sm">
+      <table class="ah-table" data-source="monthly" data-row-key="month">
+        <thead>
+          <tr>
+            <th class="l" colspan="2"></th>
+            <th class="l grp b1" colspan="4">Snuru</th>
+            <th class="l grp b2" colspan="4">Vablo</th>
+            <th class="l grp b3" colspan="4">Sleepe</th>
+            <th class="l grp" colspan="3">Gabungan</th>
+          </tr>
+          <tr>
+            <th class="l" data-field="month">Bulan</th>
+            <th data-field="days">Hari</th>
+            <th class="grp" data-field="s_spend">Spend</th><th data-field="s_orders">Pesanan</th><th data-field="s_gmv">GMV</th><th data-field="s_roi">ROAS</th>
+            <th class="grp" data-field="v_spend">Spend</th><th data-field="v_orders">Pesanan</th><th data-field="v_gmv">GMV</th><th data-field="v_roi">ROAS</th>
+            <th class="grp" data-field="l_spend">Spend</th><th data-field="l_orders">Pesanan</th><th data-field="l_gmv">GMV</th><th data-field="l_roi">ROAS</th>
+            <th class="grp" data-field="t_spend">Spend</th><th data-field="t_gmv">GMV</th><th data-field="t_roi">ROAS</th>
+          </tr>
+        </thead>
+        <tbody data-draw="monthly" data-source="monthly"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="ah-panel" id="pola-hari">
+    <h2>Pola per hari dalam seminggu</h2>
+    <p class="ah-note">Dari 8 minggu terakhir sampai tanggal data terakhir, tidak ikut filter periode. ROAS dihitung dari total GMV ÷ total spend di hari itu; pesanan dan GMV adalah rata-rata per hari. Hijau = hari dengan ROAS tertinggi tiap brand. Hari promo besar bisa menggeser rata-rata.</p>
+    <div class="ah-scroll ah-scroll-sm">
+      <table class="ah-table" data-source="weekday" data-row-key="day">
+        <thead>
+          <tr>
+            <th class="l" colspan="2"></th>
+            <th class="l grp b1" colspan="3">Snuru</th>
+            <th class="l grp b2" colspan="3">Vablo</th>
+            <th class="l grp b3" colspan="3">Sleepe</th>
+          </tr>
+          <tr>
+            <th class="l" data-field="day">Hari</th>
+            <th data-field="n">Jumlah hari</th>
+            <th class="grp" data-field="s_roi">ROAS</th><th data-field="s_orders">Pesanan/hari</th><th data-field="s_gmv">GMV/hari</th>
+            <th class="grp" data-field="v_roi">ROAS</th><th data-field="v_orders">Pesanan/hari</th><th data-field="v_gmv">GMV/hari</th>
+            <th class="grp" data-field="l_roi">ROAS</th><th data-field="l_orders">Pesanan/hari</th><th data-field="l_gmv">GMV/hari</th>
+          </tr>
+        </thead>
+        <tbody data-draw="weekday" data-source="weekday"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="ah-panel" id="tabel-harian">
+    <h2>Tabel harian</h2>
+    <p class="ah-note">Susunan sama seperti sheet Excel. Spend + PPN = spend × 1,11. ROI = GMV ÷ spend. CAC % = spend ÷ GMV × 100. SUM dan AVG dihitung dari tanggal di periode yang dipilih; ROI, CAC dan biaya per pesanan di baris itu dihitung dari total, bukan rata-rata harian.</p>
+    <div class="ah-scroll">
+      <table class="ah-table" data-source="wide" data-row-key="date">
+        <thead>
+          <tr>
+            <th class="l" colspan="2"></th>
+            <th class="l grp b1" colspan="7">Snuru</th>
+            <th class="l grp b2" colspan="7">Vablo</th>
+            <th class="l grp b3" colspan="7">Sleepe</th>
+          </tr>
+          <tr>
+            <th class="l" data-field="label">Tgl</th>
+            <th class="l" data-field="day">Hari</th>
+            <th class="grp" data-field="s_spend">Spend</th><th data-field="s_ppn">+ PPN 11%</th><th data-field="s_orders">Pesanan</th><th data-field="s_cpo">Biaya/pesanan</th><th data-field="s_gmv">GMV</th><th data-field="s_roi">ROI</th><th data-field="s_cac">CAC %</th>
+            <th class="grp" data-field="v_spend">Spend</th><th data-field="v_ppn">+ PPN 11%</th><th data-field="v_orders">Pesanan</th><th data-field="v_cpo">Biaya/pesanan</th><th data-field="v_gmv">GMV</th><th data-field="v_roi">ROI</th><th data-field="v_cac">CAC %</th>
+            <th class="grp" data-field="l_spend">Spend</th><th data-field="l_ppn">+ PPN 11%</th><th data-field="l_orders">Pesanan</th><th data-field="l_cpo">Biaya/pesanan</th><th data-field="l_gmv">GMV</th><th data-field="l_roi">ROI</th><th data-field="l_cac">CAC %</th>
+          </tr>
+        </thead>
+        <tbody data-draw="table" data-source="wide"></tbody>
+        <tfoot data-draw="totals" data-source="wide"></tfoot>
+      </table>
+    </div>
+  </section>
+</div>
+</div>
+<p class="site-foot">Sumber: TikTok Ads Manager (GMV Max). GMV adalah nilai penjualan yang diatribusikan iklan, bukan omzet bersih atau profit.</p>
+<script src="assets/app.js"></script>
+</body>
+</html>

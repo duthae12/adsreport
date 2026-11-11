@@ -1,0 +1,44 @@
+[
+ {
+  "brand": "Snuru",
+  "cash": 874375,
+  "total": 970556,
+  "credit": 0,
+  "cycle_spend": 8809,
+  "threshold": 89375,
+  "payment": "GMV Pay (aktif, utama)",
+  "last_tx_status": "Success",
+  "last_tx_amount": 99206,
+  "last_tx_type": "Bill payment",
+  "last_tx_time": "2026-11-11 18:05",
+  "checked_at": "2026-11-11 19:40"
+ },
+ {
+  "brand": "Vablo",
+  "cash": 32618393,
+  "total": 36206416,
+  "credit": 0,
+  "cycle_spend": 65548930,
+  "threshold": 209623956,
+  "payment": "GMV Pay (aktif, utama)",
+  "last_tx_status": "Issued",
+  "last_tx_amount": 3177,
+  "last_tx_type": "Ad credit",
+  "last_tx_time": "2026-11-08 19:03",
+  "checked_at": "2026-11-11 19:40"
+ },
+ {
+  "brand": "Sleepe",
+  "cash": 268489,
+  "total": 298023,
+  "credit": 0,
+  "cycle_spend": null,
+  "threshold": null,
+  "payment": "Saldo (GMV Pay belum aktif)",
+  "last_tx_status": "Processing",
+  "last_tx_amount": 1110000,
+  "last_tx_type": "Add balance (VA BCA)",
+  "last_tx_time": "2026-11-11 00:40",
+  "checked_at": "2026-11-11 19:40"
+ }
+]
