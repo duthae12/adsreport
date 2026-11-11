@@ -4,14 +4,14 @@
   "cash": 874375,
   "total": 970556,
   "credit": 0,
-  "cycle_spend": 8809,
+  "cycle_spend": 31300,
   "threshold": 89375,
   "payment": "GMV Pay (aktif, utama)",
   "last_tx_status": "Success",
   "last_tx_amount": 99206,
   "last_tx_type": "Bill payment",
   "last_tx_time": "2026-11-11 18:05",
-  "checked_at": "2026-11-11 19:40"
+  "checked_at": "2026-11-11 21:24"
  },
  {
   "brand": "Vablo",
