@@ -4,41 +4,41 @@
   "cash": 874375,
   "total": 970556,
   "credit": 0,
-  "cycle_spend": 34388,
+  "cycle_spend": 53042,
   "threshold": 89375,
   "payment": "GMV Pay (aktif, utama)",
-  "last_tx_status": "Success",
-  "last_tx_amount": 99206,
-  "last_tx_type": "Bill payment",
-  "last_tx_time": "2026-11-11 18:05",
-  "checked_at": "2026-11-12 00:08"
+  "last_tx_status": "N/A",
+  "last_tx_amount": null,
+  "last_tx_type": "N/A (belum ada transaksi di siklus baru)",
+  "last_tx_time": "N/A",
+  "checked_at": "2026-11-12 09:55"
  },
  {
   "brand": "Vablo",
   "cash": 32618393,
   "total": 36206416,
   "credit": 0,
-  "cycle_spend": 66720949,
+  "cycle_spend": 68280773,
   "threshold": 209623956,
   "payment": "GMV Pay (aktif, utama)",
   "last_tx_status": "Issued",
   "last_tx_amount": 3177,
   "last_tx_type": "Ad credit",
   "last_tx_time": "2026-11-08 19:03",
-  "checked_at": "2026-11-12 00:08"
+  "checked_at": "2026-11-12 09:55"
  },
  {
   "brand": "Sleepe",
-  "cash": 1219736,
-  "total": 1353907,
+  "cash": 1130728,
+  "total": 1255108,
   "credit": 0,
   "cycle_spend": null,
   "threshold": null,
   "payment": "Saldo (GMV Pay belum aktif)",
-  "last_tx_status": "Success",
-  "last_tx_amount": 1110000,
-  "last_tx_type": "Add balance (VA BCA)",
-  "last_tx_time": "2026-11-11 00:40",
-  "checked_at": "2026-11-12 00:08"
+  "last_tx_status": "Issued",
+  "last_tx_amount": 8384,
+  "last_tx_type": "Ad credit",
+  "last_tx_time": "2026-11-12 08:46",
+  "checked_at": "2026-11-12 09:55"
  }
 ]
