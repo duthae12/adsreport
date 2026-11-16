@@ -126,6 +126,7 @@
   .ah-va-list b { font-weight: var(--cds-font-weight-medium); }
   .ah-va-num { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .02em; user-select: all; }
   .ah-va-due { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .ah-va-bal { font-weight: var(--cds-font-weight-medium); color: var(--color-bad); }
 </style>
 
 <div class="ah">
@@ -155,7 +156,7 @@
   </div>
 
   <div id="va-banner" class="ah-va" role="alert" hidden></div>
-  <script type="application/json" id="va-data">[{"brand":"Snuru","amount":1110000,"bank":"BCA","va":"2668800135824003","due":"2026-11-17 22:19"},{"brand":"Sleepe","amount":1665000,"bank":"BCA","va":"2668800135824069","due":"2026-11-17 22:27"}]</script>
+  <script type="application/json" id="va-data">[{"brand":"Snuru","cash":606250,"checked":"2026-11-16 22:35","amount":1110000,"bank":"BCA","va":"2668800135824003","due":"2026-11-17 22:19"},{"brand":"Sleepe","cash":264147,"checked":"2026-11-16 22:35","amount":1665000,"bank":"BCA","va":"2668800135824069","due":"2026-11-17 22:27"}]</script>
 
   <section class="ah-cards" aria-label="Total periode per brand">
     <div class="ah-card" id="gabungan">
@@ -370,7 +371,12 @@
       var amt = document.createElement('span'); amt.textContent = 'Transfer Rp' + idr.format(x.amount) + ' (sudah termasuk PPN 11%)';
       var va = document.createElement('span'); va.append((x.bank || 'BCA') + ' VA ');
       var n = document.createElement('span'); n.className = 'ah-va-num'; n.textContent = x.va; va.append(n);
-      li.append(b, amt, va);
+      var bal = null;
+      if (x.cash != null) {
+        bal = document.createElement('span'); bal.className = 'ah-va-bal';
+        bal.textContent = 'Saldo sisa Rp' + idr.format(x.cash) + (x.checked ? ' (dicek ' + x.checked.slice(11, 16).replace(':', '.') + ' WIB)' : '');
+      }
+      li.append(b); if (bal) li.append(bal); li.append(amt, va);
       if (x.due) {
         var d = x.due, due = document.createElement('span'); due.className = 'ah-va-due';
         due.textContent = 'batas sekitar ' + Number(d.slice(8, 10)) + ' ' + MON[Number(d.slice(5, 7)) - 1] + ' ' + d.slice(11, 16).replace(':', '.') + ' WIB';
