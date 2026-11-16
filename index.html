@@ -118,6 +118,14 @@
   [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
   .ah-updated { margin: 0 0 var(--cds-gap-sm); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
   .ah-updated b { color: var(--color-fg); font-weight: 500; }
+  .ah-va { background: var(--color-panel); border: 1px solid var(--color-warn); border-left-width: 5px; border-radius: var(--cds-radius); padding: var(--cds-pad-sm) var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); }
+  .ah-va[hidden] { display: none; }
+  .ah-va-title { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); color: var(--color-warn); }
+  .ah-va-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--cds-gap-xs); font-size: var(--cds-font-size-body); }
+  .ah-va-list li { display: flex; flex-wrap: wrap; gap: 2px var(--cds-gap-md); align-items: baseline; }
+  .ah-va-list b { font-weight: var(--cds-font-weight-medium); }
+  .ah-va-num { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .02em; user-select: all; }
+  .ah-va-due { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
 </style>
 
 <div class="ah">
@@ -145,6 +153,9 @@
       </div>
     </div>
   </div>
+
+  <div id="va-banner" class="ah-va" role="alert" hidden></div>
+  <script type="application/json" id="va-data">[{"brand":"Snuru","amount":1110000,"bank":"BCA","va":"2668800135824003","due":"2026-11-17 22:19"},{"brand":"Sleepe","amount":1665000,"bank":"BCA","va":"2668800135824069","due":"2026-11-17 22:27"}]</script>
 
   <section class="ah-cards" aria-label="Total periode per brand">
     <div class="ah-card" id="gabungan">
@@ -341,5 +352,36 @@
 </div>
 <p class="site-foot">Sumber: TikTok Ads Manager (GMV Max). GMV adalah nilai penjualan yang diatribusikan iklan, bukan omzet bersih atau profit.</p>
 <script src="assets/app.js"></script>
+<script>
+(function () {
+  try {
+    var box = document.getElementById('va-banner'), src = document.getElementById('va-data');
+    if (!box || !src) return;
+    var list = JSON.parse(src.textContent || '[]');
+    if (!Array.isArray(list) || !list.length) { box.hidden = true; return; }
+    var MON = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+    var idr = new Intl.NumberFormat('id-ID');
+    var title = document.createElement('p'); title.className = 'ah-va-title';
+    title.textContent = '⚠ Bayar VA top up (belum dibayar)';
+    var ul = document.createElement('ul'); ul.className = 'ah-va-list';
+    list.forEach(function (x) {
+      var li = document.createElement('li');
+      var b = document.createElement('b'); b.textContent = x.brand;
+      var amt = document.createElement('span'); amt.textContent = 'Transfer Rp' + idr.format(x.amount) + ' (sudah termasuk PPN 11%)';
+      var va = document.createElement('span'); va.append((x.bank || 'BCA') + ' VA ');
+      var n = document.createElement('span'); n.className = 'ah-va-num'; n.textContent = x.va; va.append(n);
+      li.append(b, amt, va);
+      if (x.due) {
+        var d = x.due, due = document.createElement('span'); due.className = 'ah-va-due';
+        due.textContent = 'batas sekitar ' + Number(d.slice(8, 10)) + ' ' + MON[Number(d.slice(5, 7)) - 1] + ' ' + d.slice(11, 16).replace(':', '.') + ' WIB';
+        li.append(due);
+      }
+      ul.append(li);
+    });
+    box.replaceChildren(title, ul);
+    box.hidden = false;
+  } catch (e) { console.error('va-banner', e); }
+})();
+</script>
 </body>
 </html>
