@@ -11,7 +11,7 @@
   "last_tx_amount": 1110000,
   "last_tx_type": "Top up VA BCA",
   "last_tx_time": "2026-11-16 22:22",
-  "checked_at": "2026-11-19 17:59"
+  "checked_at": "2026-11-19 23:10"
  },
  {
   "brand": "Vablo",
@@ -25,12 +25,12 @@
   "last_tx_amount": 5868,
   "last_tx_type": "Ad credit",
   "last_tx_time": "2026-11-17 02:16",
-  "checked_at": "2026-11-19 17:59"
+  "checked_at": "2026-11-19 23:10"
  },
  {
   "brand": "Sleepe",
-  "cash": 1212532,
-  "total": 1345911,
+  "cash": 1187113,
+  "total": 1317696,
   "credit": 0,
   "cycle_spend": null,
   "threshold": null,
@@ -39,6 +39,6 @@
   "last_tx_amount": 1665000,
   "last_tx_type": "Top up VA BCA",
   "last_tx_time": "2026-11-16 22:24",
-  "checked_at": "2026-11-19 17:59"
+  "checked_at": "2026-11-19 23:10"
  }
 ]

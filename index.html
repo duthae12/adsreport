@@ -127,10 +127,18 @@
   .ah-va-num { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .02em; user-select: all; }
   .ah-va-due { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
   .ah-va-bal { font-weight: var(--cds-font-weight-medium); color: var(--color-bad); }
+  .ah-live { background: var(--color-panel); border: 1px solid var(--color-ok); border-left-width: 5px; border-radius: var(--cds-radius); padding: var(--cds-pad-sm) var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); }
+  .ah-live[hidden] { display: none; }
+  .ah-live-title { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); color: var(--color-ok); }
+  .ah-live-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--cds-gap-xs); font-size: var(--cds-font-size-body); }
+  .ah-live-list li { display: flex; flex-wrap: wrap; gap: 2px var(--cds-gap-md); align-items: baseline; }
+  .ah-live-list b { font-weight: var(--cds-font-weight-medium); }
+  .ah-live-meta { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .ah-live-roi { font-weight: var(--cds-font-weight-medium); color: var(--color-ok); }
 </style>
 
 <div class="ah">
-  <p class="ah-updated">Terakhir diupdate: <b>19 Nov 2026, 17.59 WIB</b> <span>· data penjualan 18 Nov final; 19 Nov sementara (diambil 17.59 WIB)</span></p>
+  <p class="ah-updated">Terakhir diupdate: <b>19 Nov 2026, 23.10 WIB</b> <span>· data penjualan 18 Nov final; 19 Nov sementara (diambil 23.10 WIB)</span></p>
   <div class="ah-head">
     <div>
       <h1 class="ah-title">Ads harian Snuru · Vablo · Sleepe</h1>
@@ -156,7 +164,38 @@
   </div>
 
   <div id="va-banner" class="ah-va" role="alert" hidden></div>
-  <script type="application/json" id="va-data">[{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 17:59","amount":24420000,"bank":"BCA","va":"2668800135897014","due":"2026-11-20 04:55"},{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 17:59","amount":24420000,"bank":"BCA","va":"266899164926879554","due":"2026-11-20 04:55"},{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 17:59","amount":24420000,"bank":"BCA","va":"2668800135897031","due":"2026-11-20 04:55"},{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 17:59","amount":24420000,"bank":"BCA","va":"266894917699958133","due":"2026-11-20 04:55"},{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 17:59","amount":24420000,"bank":"BCA","va":"2668800135897051","due":"2026-11-20 04:55"},{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 17:59","amount":24420000,"bank":"BCA","va":"2668800135897058","due":"2026-11-20 04:55"},{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 17:59","amount":24420000,"bank":"BCA","va":"2668800135897070","due":"2026-11-20 04:55"},{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 17:59","amount":24420000,"bank":"BCA","va":"2668800135897081","due":"2026-11-20 04:55"},{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 17:59","amount":1665000,"bank":"BCA","va":"2668800135897092","due":"2026-11-20 04:55"}]</script>
+  <script type="application/json" id="va-data">[{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 23:10","amount":24420000,"bank":"BCA","va":"2668800135897014","due":"2026-11-20 04:55"},{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 23:10","amount":24420000,"bank":"BCA","va":"266899164926879554","due":"2026-11-20 04:55"},{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 23:10","amount":24420000,"bank":"BCA","va":"2668800135897031","due":"2026-11-20 04:55"},{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 23:10","amount":24420000,"bank":"BCA","va":"266894917699958133","due":"2026-11-20 04:55"},{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 23:10","amount":24420000,"bank":"BCA","va":"2668800135897051","due":"2026-11-20 04:55"},{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 23:10","amount":24420000,"bank":"BCA","va":"2668800135897058","due":"2026-11-20 04:55"},{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 23:10","amount":24420000,"bank":"BCA","va":"2668800135897070","due":"2026-11-20 04:55"},{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 23:10","amount":24420000,"bank":"BCA","va":"2668800135897081","due":"2026-11-20 04:55"},{"brand":"Vablo","cash":32618393,"checked":"2026-11-19 23:10","amount":1665000,"bank":"BCA","va":"2668800135897092","due":"2026-11-20 04:55"}]</script>
+
+  <div id="live-banner" class="ah-live" role="status" hidden></div>
+  <script type="application/json" id="live-data">[{"brand":"Vablo","affiliate":"Maksan","since":"2026-11-19 09:36","cost":11097250,"orders":415,"gmv":106196640,"roi":9.57,"checked":"2026-11-19 23:10"}]</script>
+  <script>
+  (function () {
+    try {
+      var box = document.getElementById('live-banner'), src = document.getElementById('live-data');
+      if (!box || !src) return;
+      var list = JSON.parse(src.textContent || '[]');
+      if (!Array.isArray(list) || !list.length) { box.hidden = true; return; }
+      var idr = new Intl.NumberFormat('id-ID');
+      var title = document.createElement('p'); title.className = 'ah-live-title';
+      title.textContent = '\u25CF Live affiliate aktif \u00B7 performa hari ini';
+      var ul = document.createElement('ul'); ul.className = 'ah-live-list';
+      list.forEach(function (x) {
+        var li = document.createElement('li');
+        var b = document.createElement('b'); b.textContent = x.brand + ' \u00B7 ' + x.affiliate;
+        var cost = document.createElement('span'); cost.textContent = 'Biaya Rp' + idr.format(x.cost);
+        var ord = document.createElement('span'); ord.textContent = idr.format(x.orders) + ' pesanan';
+        var gmv = document.createElement('span'); gmv.textContent = 'GMV Rp' + idr.format(x.gmv);
+        var roi = document.createElement('span'); roi.className = 'ah-live-roi'; roi.textContent = 'ROI ' + Number(x.roi).toFixed(2).replace('.', ',');
+        var meta = document.createElement('span'); meta.className = 'ah-live-meta';
+        meta.textContent = 'live sejak ' + x.since.slice(11, 16).replace(':', '.') + ' WIB \u00B7 dicek ' + x.checked.slice(11, 16).replace(':', '.') + ' WIB';
+        li.append(b, cost, ord, gmv, roi, meta);
+        ul.append(li);
+      });
+      box.replaceChildren(title, ul);
+      box.hidden = false;
+    } catch (e) { console.error('live-banner', e); }
+  })();
+  </script>
 
   <section class="ah-cards" aria-label="Total periode per brand">
     <div class="ah-card" id="gabungan">
