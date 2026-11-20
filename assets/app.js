@@ -472,7 +472,7 @@ const root = document.getElementById('dash-root');
         const cash = Number(s.cash);
         return {
           brand: s.brand, cash, total: Number(s.total), credit: Number(s.credit),
-          avg7, days_left: s.payment.startsWith('GMV Pay') ? null : (avg7 ? cash / avg7 : null),
+          avg7, days_left: avg7 ? cash / avg7 : null,
           cycle_spend: s.cycle_spend == null ? null : Number(s.cycle_spend),
           threshold: s.threshold == null ? null : Number(s.threshold),
           payment: s.payment,
