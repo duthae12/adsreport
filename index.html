@@ -115,6 +115,20 @@
   .ah-pct { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); margin-top: 4px; font-variant-numeric: tabular-nums; color: var(--color-fg); }
   .ah-pct span { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); }
   .ah-table td.best { color: var(--color-ok); font-weight: 600; }
+  /* Tabel harian: kolom Tgl dan Hari dibekukan saat digeser ke kanan */
+  #tabel-harian .ah-table thead tr:first-child th:first-child,
+  #tabel-harian .ah-table thead tr:nth-child(2) th:nth-child(-n+2),
+  #tabel-harian .ah-table tbody td:nth-child(-n+2),
+  #tabel-harian .ah-table tfoot td:nth-child(-n+2) { position: sticky; left: 0; background: var(--color-panel); z-index: 2; }
+  #tabel-harian .ah-table thead tr:first-child th:first-child,
+  #tabel-harian .ah-table thead tr:nth-child(2) th:nth-child(-n+2) { z-index: 3; }
+  #tabel-harian .ah-table thead tr:nth-child(2) th:nth-child(1),
+  #tabel-harian .ah-table tbody td:nth-child(1),
+  #tabel-harian .ah-table tfoot td:nth-child(1) { width: 4.5rem; min-width: 4.5rem; max-width: 4.5rem; box-sizing: border-box; }
+  #tabel-harian .ah-table thead tr:nth-child(2) th:nth-child(2),
+  #tabel-harian .ah-table tbody td:nth-child(2),
+  #tabel-harian .ah-table tfoot td:nth-child(2) { left: 4.5rem; border-right: 1px solid var(--color-border-line); }
+  #tabel-harian .ah-table tr.tot td:nth-child(-n+2) { background: var(--color-bg); }
   [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
   .ah-updated { margin: 0 0 var(--cds-gap-sm); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
   .ah-updated b { color: var(--color-fg); font-weight: 500; }
