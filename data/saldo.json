@@ -4,33 +4,33 @@
   "cash": 1248750,
   "total": 1386112,
   "credit": 0,
-  "cycle_spend": 35779,
+  "cycle_spend": 81423,
   "threshold": 89375,
   "payment": "GMV Pay (aktif, utama)",
   "last_tx_status": "Success",
   "last_tx_amount": 99206,
   "last_tx_type": "Bill payment",
   "last_tx_time": "2026-11-22 09:05",
-  "checked_at": "2026-11-22 16:29"
+  "checked_at": "2026-11-22 23:58"
  },
  {
   "brand": "Vablo",
   "cash": 210118393,
   "total": 233231416,
   "credit": 0,
-  "cycle_spend": 148067782,
+  "cycle_spend": 149356928,
   "threshold": 209623956,
   "payment": "GMV Pay (aktif, utama)",
   "last_tx_status": "Issued",
   "last_tx_amount": 29076,
   "last_tx_type": "Ad credit",
   "last_tx_time": "2026-11-20 04:18",
-  "checked_at": "2026-11-22 16:29"
+  "checked_at": "2026-11-22 23:58"
  },
  {
   "brand": "Sleepe",
-  "cash": 2039520,
-  "total": 2263867,
+  "cash": 1919561,
+  "total": 2130713,
   "credit": 0,
   "cycle_spend": null,
   "threshold": null,
@@ -39,6 +39,6 @@
   "last_tx_amount": 2220000,
   "last_tx_type": "Top up VA BCA",
   "last_tx_time": "2026-11-21 20:48",
-  "checked_at": "2026-11-22 16:29"
+  "checked_at": "2026-11-22 23:58"
  }
 ]
