@@ -105,7 +105,7 @@ const root = document.getElementById('dash-root');
     if (p === '7') return [addDays(last, -6), last];
     if (p === 'mtd') return [last.slice(0, 8) + '01', last];
     if (p === 'prev') { const f = new Date(Date.UTC(+last.slice(0, 4), +last.slice(5, 7) - 2, 1)); const e = new Date(Date.UTC(+last.slice(0, 4), +last.slice(5, 7) - 1, 0)); return [iso(f), iso(e)]; }
-    return null;
+    return [last.slice(0, 8) + '01', last];
   };
   const range = () => {
     const last = lastDate(); if (!last) return null;
