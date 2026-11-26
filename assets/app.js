@@ -101,6 +101,7 @@ const root = document.getElementById('dash-root');
   };
   const presetRange = (p, last) => {
     if (p === 'last') return [last, last];
+    if (p === 'yday') { const y = addDays(last, -1); return [y, y]; }
     if (p === '7') return [addDays(last, -6), last];
     if (p === 'mtd') return [last.slice(0, 8) + '01', last];
     if (p === 'prev') { const f = new Date(Date.UTC(+last.slice(0, 4), +last.slice(5, 7) - 2, 1)); const e = new Date(Date.UTC(+last.slice(0, 4), +last.slice(5, 7) - 1, 0)); return [iso(f), iso(e)]; }
