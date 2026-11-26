@@ -221,6 +221,17 @@ const root = document.getElementById('dash-root');
   dash.draw('cal', renderCal);
 
   dash.draw('last', (el) => { const l = lastDate(); el.textContent = l ? dLabel(l) : '—'; });
+  const spanLabel = (a, b) => {
+    if (a === b) return dLabel(a);
+    if (a.slice(0, 7) === b.slice(0, 7)) return Number(a.slice(8, 10)) + '–' + dLabel(b);
+    return dLabel(a) + ' – ' + dLabel(b);
+  };
+  dash.draw('cmp', (el) => {
+    const r = range();
+    if (!r) { el.textContent = 'vs periode sebelumnya'; return; }
+    const n = Math.round((Date.parse(r[1] + 'T00:00:00Z') - Date.parse(r[0] + 'T00:00:00Z')) / 864e5) + 1;
+    el.textContent = spanLabel(r[0], r[1]) + ' vs ' + spanLabel(addDays(r[0], -n), addDays(r[0], -1));
+  });
   dash.draw('period', (el) => {
     const r = range(); const rows = inRange();
     if (!r || !rows) { el.textContent = '—'; return; }
